@@ -8,6 +8,9 @@ function buildHeaders(orig?: HeadersInit): Headers {
   }
   return headers;
 }
+
+const API_BASE = import.meta.env.DEV ? '/api' : '/api';
+
 /*
   const todos = await apiFetch<Todo[]>('/api/todos');
    */
@@ -15,7 +18,7 @@ export async function apiFetch<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(url, {
+  const response = await fetch(`${API_BASE}${url}`, {
     ...options,
     headers: buildHeaders(options.headers),
     //credentials: 'include', 
@@ -48,7 +51,7 @@ export async function apiPost<Body, Res = void>(
   body: Body,
   options: Omit<RequestInit, "method" | "body"> = {}
 ): Promise<Res> {
-  const response = await fetch(url, {
+  const response = await fetch(`${API_BASE}${url}`, {
     method: "POST",
     ...options,
     headers: buildHeaders(options.headers),
