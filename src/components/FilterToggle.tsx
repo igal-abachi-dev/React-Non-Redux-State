@@ -1,11 +1,11 @@
-import { useFilterState, useFilterActions } from '../context/TasksContext'
+import { useFilterState, useFilterActions } from "../context/TasksContext";
 
 export function FilterToggle() {
-  const { showCompleted } = useFilterState()
-  const { toggle }        = useFilterActions()
+  const { showCompleted } = useFilterState();
+  const { toggle } = useFilterActions();
   return (
     <button onClick={toggle} style={{ marginBottom: 16 }}>
-      {showCompleted ? 'Hide' : 'Show'} Completed Tasks
+      {showCompleted ? "Hide" : "Show"} Completed Tasks
     </button>
-  )
+  );
 }
