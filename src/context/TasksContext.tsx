@@ -31,20 +31,21 @@ type Action =
   | { type: "TOGGLE_SHOW_COMPLETED" };
 
 // — Domain reducers —
-function tasksReducer(state: Task[] = [], action: Action): Task[] {
+function tasksReducer(state: Task[] | undefined, action: Action): Task[] {
+  const currentState = state ?? [];
   switch (action.type) {
     case "SET_TASKS":
       return action.payload;
     case "ADD_TASK":
-      return [...state, action.payload];
+      return [...currentState, action.payload];
     case "UPDATE_TASK":
-      return state.map((t) =>
+      return currentState.map((t) =>
         t.id === action.payload.id ? action.payload : t
       );
     case "REMOVE_TASK":
-      return state.filter((t) => t.id !== action.payload);
+      return currentState.filter((t) => t.id !== action.payload);
     default:
-      return state;
+      return currentState;
   }
 }
 function loadingReducer(state = true, action: Action): boolean {
@@ -81,7 +82,12 @@ const FilterDispatchCtx = createContext<{ toggle: () => void } | undefined>(
 
 // — Provider —
 export function TasksProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useThunkReducer(rootReducer, undefined);
+  const initialState: State = {
+    tasks: [],
+    loading: true,
+    filter: { showCompleted: true }
+  };
+  const [state, dispatch] = useThunkReducer(rootReducer, initialState);
 
   // fetch initial tasks
   useEffect(() => {
