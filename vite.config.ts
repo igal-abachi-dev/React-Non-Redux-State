@@ -8,15 +8,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            // Add CORS headers to the proxied request
-            proxyReq.setHeader('Origin', 'http://localhost:3000');
-          });
-        },
+        changeOrigin: true
       }
     }
   }
