@@ -5,7 +5,7 @@ import {
   useMemo,
   type ReactNode,
 } from "react";
-import { api } from "../api/client";
+import { apiFetch, apiPost } from "../api/client";
 import { combineReducers } from "../utils/combineReducers";
 import { useThunkReducer, type ThunkAction } from "../utils/useThunkReducer";
 
@@ -87,11 +87,11 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     dispatch({ type: "SET_LOADING", payload: true });
-    api
-      .get<Task[]>("/tasks")
-      .then((res: { data: any }) => {
+
+    apiFetch<Task[]>("/tasks")
+      .then((res: any) => {
         if (!cancelled) {
-          dispatch({ type: "SET_TASKS", payload: res.data });
+          dispatch({ type: "SET_TASKS", payload: res });
           dispatch({ type: "SET_LOADING", payload: false });
         }
       })
@@ -106,11 +106,13 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   // optimistic add-task thunk
   const addTaskThunk =
     (title: string): ThunkAction<State, Action> =>
-    async (dispatch, getState) => {
+    async (dispatch, _getState) => {
       const temp: Task = { id: Date.now(), title, completed: false };
       dispatch({ type: "ADD_TASK", payload: temp });
       try {
-        const { data } = await api.post<Task>("/tasks", { title });
+        const data = await apiPost<{ title: string }, Task>("/tasks", {
+          title,
+        });
         dispatch({ type: "UPDATE_TASK", payload: data });
       } catch {
         dispatch({ type: "REMOVE_TASK", payload: temp.id });

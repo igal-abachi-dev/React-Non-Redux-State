@@ -4,6 +4,7 @@ import {
   type ThunkAction,
   type Dispatch,
 } from "../utils/useThunkReducer";
+import { apiFetch } from "../api/client";
 
 // 1) Generic State & Actions
 export type FetchState<T> = {
@@ -50,13 +51,11 @@ export function useFetchData<T>(
     // 4) Thunk with generic T
     const fetchThunk: ThunkAction<FetchState<T>, FetchAction<T>> = async (
       dispatch,
-      getState
+      _getState
     ) => {
       dispatch({ type: "FETCH_START" });
       try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(res.statusText);
-        const json = (await res.json()) as T;
+        const json = await apiFetch<T>(url);
         dispatch({ type: "FETCH_SUCCESS", payload: json });
       } catch (err: any) {
         dispatch({ type: "FETCH_ERROR", payload: err.message });
