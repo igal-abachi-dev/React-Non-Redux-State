@@ -35,7 +35,7 @@ function tasksReducer(state: Task[] | undefined, action: Action): Task[] {
   const currentState = state ?? [];
   switch (action.type) {
     case "SET_TASKS":
-      return action.payload;
+      return Array.isArray(action.payload) ? action.payload : [];
     case "ADD_TASK":
       return [...currentState, action.payload];
     case "UPDATE_TASK":
