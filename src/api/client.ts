@@ -9,16 +9,16 @@ function buildHeaders(orig?: HeadersInit): Headers {
   return headers;
 }
 
-const API_BASE = import.meta.env.DEV ? '/api' : '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /*
-  const todos = await apiFetch<Todo[]>('/api/todos');
+  const todos = await apiFetch<Todo[]>('/todos');
    */
 export async function apiFetch<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(`${API_BASE}${url}`, {
+  const response = await fetch(`${API_BASE_URL}${url}`, {
     ...options,
     headers: buildHeaders(options.headers),
     //credentials: 'include', 
@@ -51,7 +51,7 @@ export async function apiPost<Body, Res = void>(
   body: Body,
   options: Omit<RequestInit, "method" | "body"> = {}
 ): Promise<Res> {
-  const response = await fetch(`${API_BASE}${url}`, {
+  const response = await fetch(`${API_BASE_URL}${url}`, {
     method: "POST",
     ...options,
     headers: buildHeaders(options.headers),
