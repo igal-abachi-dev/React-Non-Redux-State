@@ -18,7 +18,6 @@ app.use(cors({
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(process.cwd(), 'public')));
 
 // API routes
 app.use('/', indexRouter);
