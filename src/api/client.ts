@@ -55,7 +55,7 @@ export async function apiPost<Body, Res = void>(
     method: "POST",
     ...options,
     headers: buildHeaders(options.headers),
-    body: JSON.stringify(body),
+    body: JSON.stringify(body), 
     //credentials: 'include', 
   });
 
